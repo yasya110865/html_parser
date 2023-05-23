@@ -63,8 +63,19 @@ result = {}
 result['data'] = data
 result['title'] = title
 result['text'] = text
+key_text = 'ВОЗ'
 
-pprint.pprint(result)
+response = []
+for i in range(len(result['data'])):
+    if key_text.lower() in result['title'][i].lower() or key_text.lower() in result['text'][i].lower():
+        newsdata = result['data'][i]
+        newstitle = result['title'][i]
+        newstext = result['text'][i]
+        reply = f'{newsdata}. {newstitle}. {newstext}'
+        response.append(reply)
+print(response)
+        # print(result['data'][i], result['title'][i], result['text'][i])
+
 
 
 
