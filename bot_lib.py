@@ -10,6 +10,14 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-    bot.reply_to(message, "О чем хочешь узнать?")
+    bot.reply_to(message, "О чем хочешь узнать? Введи ключевое слово.")
+
+@bot.message_handler(content_types=['text'])
+def search_news(message):
+    text = newsparser(message.text)
+
+    for i in range(len(text)):
+        bot.send_message(message.chat.id, text[i])
+
 
 bot.polling()

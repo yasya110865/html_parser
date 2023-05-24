@@ -15,18 +15,20 @@ def newsparser(key_text):
     #получаем ссылки на следующие страницы
     links = soup.find_all('div',class_="b-pageline")
     link_list = links[0].find_all('a')
-    print(len(link_list))
+    # print(len(link_list))
 
     #список адресов следующих страниц
     href_list = []
     for link in link_list:
-        href = link.get('href')
-        href_list.append(href)
-    print(href_list)
 
-    #почему то там повторения, убираем их
-    href_list = href_list[1:4]
-    print(href_list)
+        href = link.get('href')
+        if href not in href_list:
+            href_list.append(href)
+    # print(href_list)
+
+    #начинаем с 1, т к нулевая уже есть
+    href_list = href_list[1:]
+    # print(href_list)
 
     #парсим первую страницу
     data = []
@@ -68,7 +70,7 @@ def newsparser(key_text):
     result['title'] = title
     result['text'] = text
 
-
+# это для бота, формируем из значений словаря ответ по ключевому слову
     response = []
     for i in range(len(result['data'])):
         if key_text.lower() in result['title'][i].lower() or key_text.lower() in result['text'][i].lower():
@@ -77,10 +79,11 @@ def newsparser(key_text):
              newstext = result['text'][i]
              reply = f'{newsdata}. {newstitle}. {newstext}'
              response.append(reply)
-        else:
-            response = 'Не нашлось новостей на эту тему'
+    if len(response) == 0:
+        response.append('Не нашлось новостей на эту тему. Попробуйте другое ключевое слово')
     return response
 
 
-res = newsparser('Козлов')
-print(res)
+# res = newsparser('антибиотик')
+#
+# print(res)
